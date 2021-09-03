@@ -1,0 +1,39 @@
+#root{
+    display: flex;
+}
+.table{
+    width: 50%;
+    border: 2px solid red;
+}
+.table-header{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.table-row{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.table-data{
+    max-width: 20%;
+    min-width: 20%;
+}
+
+.editDiv{
+    width: 50%;
+}
+
+.form-group{
+    padding: 0 5px 10px 25px;
+}
+.edit-input{
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0;
+}
+.edit-textarea{
+    display: flex;
+    flex-direction: column;
+    height: 100px;
+}
