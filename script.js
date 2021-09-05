@@ -1,8 +1,19 @@
 const state = {
-  arr : ["firstName","lastName","about","eyeColor","phone"],
-  dataArr: []
+  objHeader : {
+    "firstName":"Имя",
+    "lastName":"Фамилия",
+    "about":"Описание ",
+    "eyeColor":"Цвет глаз ",
+    "phone":"Номер телефона"
+  },
+  dataArr: [],
+  root: null,
+  tbody:null,
+  table:null,
+  rightDiv:null
 };
-let {arr,dataArr} = state;
+let {objHeader,dataArr,root,tbody,rightDiv} = state;
+
 
 fetch("data.json")
   .then(response => {
@@ -15,54 +26,55 @@ fetch("data.json")
       const item = {firstName, lastName, about, eyeColor, phone}
       dataArr.push(item);
     }
-    for (let j = 0; j < dataArr.length; j++) {
-      addRowToTable(dataArr[j],tbody,j)
-    }
+    addRowsToTable(dataArr)
   })
 
 
-
-
-const createTable = (arr,tbody) => {
-  const tbl = document.createElement('table');
-  tbl.className = "table";
-  const th = document.createElement('th');
-  th.className = "table-header";
-
-  for (let i = 0; i < arr.length; i++) {
-    let td = document.createElement("td");
-
-    td.innerText = arr[i];
-    td.className = "table-data";
-
-    th.appendChild(td);
-    td.addEventListener("click",() => sortingColumnAsc(arr[i],tbody) )
-    td.addEventListener("dblclick",() => sortingColumnDesc(arr[i],tbody) )
-
+const createElement = (elementName,className = null,value = null,parent = null) => {
+  let el = document.createElement(elementName);
+  if(className !== null){
+    el.className = className;
   }
-  tbl.appendChild(th);
+  if(value !== null){
+    el.textContent = value; // для остальных
+    el.value = value //для input
+  }
+  if(parent !== null){
+    parent.appendChild(el);
+  }
+  return el;
+}
+const deleteTbody = () => {
+  tbody.textContent = "";
+}
+
+const createTable = (obj) => {
+  const tbl = createElement("table","table",null,root);
+  const th = createElement("th","table-header",null,tbl);
+
+  for (let objKey in obj) {
+    let td = createElement("td","table-data",obj[objKey],th);
+    td.addEventListener("click",() => sortingColumnAsc(objKey));
+    td.addEventListener("dblclick",() => sortingColumnDesc(objKey));
+  }
+
   return tbl;
 }
-const addRowToTable = (obj,tbody,j) => {
-  const tr = document.createElement("tr");
-  tr.className = "table-row";
-  tr.addEventListener("click",() => editCell(editDiv,j))
-  for (let objKey in obj) {
-    addCellToRow(obj[objKey],tr,j,objKey)
-  }
-  tbody.appendChild(tr)
-};
-const addCellToRow = (data,tr) => {
-  const  td = document.createElement("td");
 
-  if(data.length >= 30){
-    td.innerText = textTruncate(data);
-  }else{
-    td.innerText = data;
+const addRowsToTable = (arr) => {
+  for (let i = 0; i < arr.length; i++) {
+    let tr = createElement("tr","table-row", null,tbody );
+    tr.addEventListener("click",() => editCell(i));
+    for (let objKey in arr[i]) {
+      if(arr[i][objKey].length > 30){
+        createElement("td","table-data",textTruncate(arr[i][objKey]),tr);
+      }else{
+        createElement("td","table-data",arr[i][objKey],tr);
+      }
+    }
   }
-  td.className = "table-data";
-  tr.appendChild(td);
-};
+}
+
 const textTruncate = (str, length = 40, ending = "...") => {
   if (str.length > length) {
     return str.substring(0, length - ending.length) + ending;
@@ -71,51 +83,49 @@ const textTruncate = (str, length = 40, ending = "...") => {
   }
 }
 
-const editCell = (root,j) => {
-  root.textContent = "";
-  const form = document.createElement("div");
-  form.className = "form-group";
-  const h3 = document.createElement("h3");
-  h3.textContent = "Change Cell Information"
-  form.appendChild(h3)
+const editCell = (j) => {
+  rightDiv.textContent = "";
+
+  const form = createElement("form","form-group",null,rightDiv);
+
+  createElement("h3",null,"Change Cell Information",form);
+
   for (let key in dataArr[j]) {
     if(dataArr[j][key].length > 30 ){
-      let textarea = document.createElement("textarea");
-      textarea.value = dataArr[j][key];
-      textarea.className = "edit-textarea"
-      form.appendChild(textarea)
+        createElement("textarea","edit-textarea",dataArr[j][key],form);
     }else{
-      let input = document.createElement("input");
-      input.value = dataArr[j][key];
-      input.className = "edit-input";
-      form.appendChild(input)
+      let input = createElement("input","edit-input",dataArr[j][key],form);
+      input.type = "text";
     }
   }
-  const btn = document.createElement("button");
-  btn.textContent = "Change";
-  btn.className = "btn";
-  form.appendChild(btn);
-  root.appendChild(form);
+  const btn = createElement("button","btn","Change",form);
+
+  btn.addEventListener("click",() => changeInfoToCell())
+
+  rightDiv.appendChild(form);
 }
 
+const changeInfoToCell = () => {
+  console.log("id")
+}
 
-const sortingColumnAsc = (item,tbody) => {
-  tbody.innerText = "";
+const sortingColumnAsc = (item) => {
+  deleteTbody();
   for (let i = 0; i < dataArr.length; i+=1) {
-    for (let j = 0; j < dataArr.length-1-i; j+=1) {
-      if(dataArr[j][item] > dataArr[j+1][item]){
-        let tmp = dataArr[j];
-        dataArr[j] = dataArr[j+1];
-        dataArr[j+1] = tmp;
+      for (let j = 0; j < dataArr.length-1-i; j+=1) {
+          if(dataArr[j][item] > dataArr[j+1][item]){
+            let tmp = dataArr[j];
+            dataArr[j] = dataArr[j+1];
+            dataArr[j+1] = tmp;
+          }
       }
     }
-  }
-  for (let k = 0; k < dataArr.length; k++) {
-    addRowToTable(dataArr[k],tbody,k)
-  }
+
+  addRowsToTable(dataArr);
+
 }
-const sortingColumnDesc = (item,tbody) => {
-  tbody.innerText = "";
+const sortingColumnDesc = (item) => {
+  deleteTbody();
   for (let i = 0; i < dataArr.length; i+=1) {
     for (let j = 0; j < dataArr.length-1-i; j+=1) {
       if(dataArr[j][item] < dataArr[j+1][item]){
@@ -125,21 +135,20 @@ const sortingColumnDesc = (item,tbody) => {
       }
     }
   }
-  for (let k = 0; k < dataArr.length; k++) {
-    addRowToTable(dataArr[k],tbody,k)
-  }
+
+  addRowsToTable(dataArr);
 }
 
 
 
-const root = document.querySelector("#root");
-const tbody = document.createElement("tbody");
-const table = createTable(arr,tbody);
-table.appendChild(tbody);
-root.appendChild(table);
+root = document.querySelector("#root"); // Получаем корень узел #root
+table = createTable(objHeader); // Создаем таблицу с заголовками
+tbody = createElement("tbody","t-body",null,table); // создаем tbody
 
-const editDiv = document.createElement("div");
-editDiv.className = "editDiv";
-root.appendChild(editDiv);
+rightDiv = document.createElement("div");
+rightDiv.className = "rightDiv";
+root.appendChild(rightDiv);
+
+
 
 

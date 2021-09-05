@@ -18,9 +18,10 @@
 .table-data{
     max-width: 20%;
     min-width: 20%;
+    cursor: pointer;
 }
 
-.editDiv{
+.rightDiv{
     width: 50%;
 }
 
