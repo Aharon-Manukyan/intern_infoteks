@@ -12,13 +12,14 @@
 
 .table-row{
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
 }
 
 .table-data{
     max-width: 20%;
     min-width: 20%;
     cursor: pointer;
+    text-align: center;
 }
 
 .rightDiv{
@@ -27,6 +28,10 @@
 
 .form-group{
     padding: 0 5px 10px 25px;
+}
+
+.t-body{
+
 }
 .edit-input{
     display: flex;
