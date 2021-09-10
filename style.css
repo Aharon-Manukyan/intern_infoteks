@@ -1,6 +1,8 @@
+/* стили для корня */
 #root{
     display: flex;
 }
+/* таблица , заголовка таблицы строки и ячейки*/
 .table{
     width: 50%;
     border: 2px solid red;
@@ -9,12 +11,10 @@
     display: flex;
     justify-content: space-evenly;
 }
-
 .table-row{
-    display: flex;
+    display: none;
     justify-content: space-around;
 }
-
 .table-data{
     max-width: 20%;
     min-width: 20%;
@@ -22,16 +22,25 @@
     text-align: center;
 }
 
+/* спаны */
+.span-header{
+    font-size: 20px!important;
+    font-weight: 900;
+    margin-left: 15px!important;
+}
+.span-td{
+    display: flex;
+    justify-content: space-evenly
+}
+
+/* правый див для изменения строк */
 .rightDiv{
     width: 50%;
 }
 
+/* стили для формы и изменяемых элементов */
 .form-group{
     padding: 0 5px 10px 25px;
-}
-
-.t-body{
-
 }
 .edit-input{
     display: flex;
@@ -43,3 +52,28 @@
     flex-direction: column;
     height: 100px;
 }
+
+/* стили для pagination */
+.num {
+    display: none;
+}
+.paginator {
+    line-height: 150%;
+}
+.paginator > span {
+    display: inline-block;
+    margin-right: 10px;
+    cursor: pointer;
+    padding: 2px;
+    border: 2px solid;
+}
+.show{
+    color: red;
+}
+.hidden{
+    color:grey;
+    opacity:0.6
+}
+
+
+
