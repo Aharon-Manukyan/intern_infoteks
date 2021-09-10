@@ -19,7 +19,6 @@
     max-width: 20%;
     min-width: 20%;
     cursor: pointer;
-    text-align: center;
 }
 
 /* спаны */
@@ -59,6 +58,8 @@
 }
 .paginator {
     line-height: 150%;
+    text-align: center;
+    margin-top: 15px;
 }
 .paginator > span {
     display: inline-block;
